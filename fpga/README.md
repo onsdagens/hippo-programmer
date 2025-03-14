@@ -12,6 +12,8 @@ For instance bit 0 of current memory output corresponds to the red channel of LE
 
 The memory can be programmed (in tests we use [ftdaye](https://github.com/onsdagens/ftdaye), you can refer to example `ftdaye_mpsse`, for an idea on how to work with this.).
 
+We intend to eventually extend upon ftdaye to make it more usable, for now this is future work.
+
 ## Building
 By running
 ```
