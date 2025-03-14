@@ -30,13 +30,13 @@ module fpga_top (
   // assign led_g = {1'b0, 1'b0, 1'b0, 1'b0};
   // assign led   = {0, 0, 0, 0};
   jtag jtag (
-      .clk_i(clk),
+      //.clk_i(clk),
       .rst_i(sw[1]),
 
-      .sel(jtag_sel),
+      .sel_o(jtag_sel),
 
       .data_o  (jtag_data),
-      .word_r_o(jtag_word_ready),
+      .word_rdy_o(jtag_word_ready),
       // .write_addr_o(jtag_write_addr),
 
       .ack_i(jtag_ack),
@@ -54,7 +54,7 @@ module fpga_top (
   assign mem_addr = jtag_ack ? jtag_write_addr : read_addr;
   //assign mem_we   = jtag_sel;
 
-  atl_sp_bram memory (
+  hippo_memory memory (
       .clk_i(clk),
       .rst_i(sw[1]),
 

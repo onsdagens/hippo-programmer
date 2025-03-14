@@ -1,4 +1,3 @@
-#!/usr/bin/env -S vivado -mode batch -source
 # Vivado in project mode is less bad, pick part here, we use arty a35t dev board
 create_project arty ./vivado/ -force -part xc7a35ticsg324-1L;
 

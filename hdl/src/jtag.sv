@@ -78,25 +78,25 @@ module jtag
   always @(posedge TCK) begin
     if (rst_i) begin
       bs_bit_count_r <= 0;
-      word_r_o <= 0;
+      word_rdy_o <= 0;
       bs_addr_r <= 0;
       bs_shift_r <= 0;
     end else if (!SEL) begin
       bs_bit_count_r <= 0;
-      word_r_o <= 0;
+      word_rdy_o <= 0;
       bs_addr_r <= 0;
       bs_shift_r <= 0;
     end else if (SHIFT && !RESET) begin
       bs_shift_r     <= bs_tmp;  // shift data out
       bs_bit_count_r <= bs_bit_count_r + 1;  // wrapping data_word_width bit counter
       if ((bs_bit_count_r == (BIT_WIDTH - 1)) && !ack_i) begin  // at last bit
-        word_r_o            <= 1;
+        word_rdy_o            <= 1;
         data_o              <= bs_tmp;  // output the word
         bs_mem_r[bs_addr_r] <= bs_tmp;  // update current address in memory
         bs_shift_r          <= bs_mem_r[bs_addr_next];  // load next address to shift register
         bs_addr_r           <= bs_addr_next;  // update address
       end else if (ack_i) begin
-        word_r_o <= 0;  // word has been handled cross domain, move on to next
+        word_rdy_o <= 0;  // word has been handled cross domain, move on to next
       end
     end
   end

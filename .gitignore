@@ -1,3 +1,4 @@
+/fpga/.bender
 /fpga/vivado*
 fpga/hdl/ip/clk_wiz_0/*
 !fpga/hdl/ip/clk_wiz_0/clk_wiz_0.xci

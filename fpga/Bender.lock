@@ -1,5 +1,11 @@
 packages:
-  hippo_programmer:
+  hippo-memory:
+    revision: 77bde919a1744e96cce0da6977cac4f387897091
+    version: null
+    source:
+      Git: https://github.com/onsdagens/hippo-memory
+    dependencies: []
+  hippo-programmer:
     revision: null
     version: null
     source:

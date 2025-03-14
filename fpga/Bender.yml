@@ -1,20 +1,21 @@
 package:
-  name: fpga_tests
+  name: fpga-tests
   authors:
     - "onsdagens <pawel.dzialo@ltu.se>"
 
 dependencies:
-  hippo_programmer: {path: "../", target: all(fpga)}
-  hippo_memory: {git: "https://github.com/onsdagens/hippo-memory"}
+  hippo-programmer: {path: "../"}
+  hippo-memory: {git: "https://github.com/onsdagens/hippo-memory", rev: "master"}
 
 sources:
    # Source files
-   #- target: not(constraints_vivado_artya7)
-   #  files: 
   - ./hdl/src/fpga_top.sv
   # Board specific constraints. Here we target
   # Digilent Arty A7
-  #- target: constraints_vivado_artya7
   - ./hdl/constraints/arty.xdc
   - ./hdl/constraints/timing.xdc
+  # Board specific IP. In this case a clock.
+  #- ./hdl/ip/clk_wiz_0/clk_wiz_0.xci
+  # The file containing data for memory initialization
+  - ./MEM_FILE.mem
 
