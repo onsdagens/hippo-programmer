@@ -1,0 +1,20 @@
+package:
+  name: fpga_tests
+  authors:
+    - "onsdagens <pawel.dzialo@ltu.se>"
+
+dependencies:
+  hippo_programmer: {path: "../", target: all(fpga)}
+  hippo_memory: {git: "https://github.com/onsdagens/hippo-memory"}
+
+sources:
+   # Source files
+   #- target: not(constraints_vivado_artya7)
+   #  files: 
+  - ./hdl/src/fpga_top.sv
+  # Board specific constraints. Here we target
+  # Digilent Arty A7
+  #- target: constraints_vivado_artya7
+  - ./hdl/constraints/arty.xdc
+  - ./hdl/constraints/timing.xdc
+

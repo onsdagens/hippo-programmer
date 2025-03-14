@@ -1,0 +1,7 @@
+packages:
+  hippo_programmer:
+    revision: null
+    version: null
+    source:
+      Path: ..
+    dependencies: []

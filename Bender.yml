@@ -1,0 +1,9 @@
+package:
+  name: hippo_programmer
+  authors:
+    - "onsdagens <pawel.dzialo@ltu.se>"
+
+dependencies:
+
+sources:
+  - hdl/src/jtag.sv
