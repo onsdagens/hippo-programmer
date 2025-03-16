@@ -31,6 +31,12 @@ add_files -norecurse -fileset [current_fileset] $source_files
 # Add constraints to constraint fileset
 add_files -norecurse -fileset constrs_1 $constraint_files
 
+foreach const $constraint_files {
+  if {[string match "*impl.xdc" $const]} {
+    set_property used_in_synthesis false [get_files $const]
+  }
+}
+
 set_property verilog_define [list \
     TARGET_FPGA \
     TARGET_SYNTHESIS \

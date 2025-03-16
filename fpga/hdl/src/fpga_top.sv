@@ -10,6 +10,7 @@ module fpga_top (
 
   logic clk;
   logic locked;
+
   clk_wiz_0 clk_gen (
       .clk_in1 (sysclk),
       .clk_out1(clk),

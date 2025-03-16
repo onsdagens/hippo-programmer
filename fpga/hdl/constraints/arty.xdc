@@ -10,6 +10,12 @@ set_property CFGBVS VCCO [current_design]
 
 create_clock -period 20.000 -name DRCK -waveform {0.000 10.000} [get_pins jtag/BSCANE2_inst/DRCK]
 create_clock -period 20.000 -name TCK -waveform {0.000 10.000} [get_pins jtag/BSCANE2_inst/TCK]
+
+## Main clock
+#create_clock -period 20.000 -name clk -waveform {0.000 10.000} [get_pins clk_gen/clk_out1]
+
+# TCK and clk are unrelated, tell vivado that.
+# set_clock_groups -asynchronous -group [get_clocks TCK] -group [get_clocks clk_out1_clk_wiz_0]
 # create_clock -period 1.000 -name virtual_clock
 
 
