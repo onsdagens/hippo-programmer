@@ -1,33 +1,19 @@
 // jtag_top
 `timescale 1ns / 1ps
 
-module jtag
-#(
-  parameter integer BIT_WIDTH = 8
-)
-
-(
+module jtag #(
+    parameter integer BIT_WIDTH = 8
+) (
+    // system clock
+    input clk_i,
     // reset signal
     input rst_i,
 
-    // select signal from the BSCANE2 unit
-    output logic sel_o,
+    output logic we_o,
 
-    // received data is exposed on this line
     output logic [BIT_WIDTH-1:0] data_o,
-    // whenever the programmer has received enough 
-    // bits to fill a word, this is raised
-    output logic word_rdy_o,
 
-    // used to acknowledge the word by the receiving end
-    // this is for crossing the clock domain from 
-    // TCK to whatever is used in the core
-    input  logic ack_i,
-
-
-    // This is raised whenever the JTAG enters a reset state
-    output logic reset_o,
-    input  logic led
+    output logic [9:0] write_addr_o
 );
 
   // BSCANE2: Boundary-Scan User Instruction
@@ -56,16 +42,27 @@ module jtag
   // End of BSCANE2_inst instantiation
 
   // clocked registers
-  logic [ 7:0] bs_shift_r;
-  logic [ 2:0] bs_bit_count_r;
+  logic [7:0] bs_shift_r;
+  logic [2:0] bs_bit_count_r;
   logic [14:0] bs_addr_r;
   logic [31:0] bs_mem_r;
 
   // temporaries
-  logic [ 7:0] bs_tmp;
+  logic [7:0] bs_tmp;
   logic [14:0] bs_addr_next;
 
-  // host-side we do not care about any output 
+  /// CDC registers
+  // TCK side
+  logic [BIT_WIDTH-1:0] jtag_data_r;
+  logic jtag_word_rdy_r;
+
+  // System Clock Side
+  logic [9:0] write_addr_r;
+  logic [BIT_WIDTH-1:0] data_r;
+  logic ack_r;
+
+
+  // host-side we do not care about any output
   assign TDO = 0;
 
   assign bs_tmp = {TDI, bs_shift_r[7:1]};
@@ -74,30 +71,57 @@ module jtag
   assign reset_o = RESET;
   assign sel_o = SEL;
 
-  
+
   always @(posedge TCK) begin
     if (rst_i) begin
       bs_bit_count_r <= 0;
-      word_rdy_o <= 0;
+      jtag_word_rdy_r <= 0;
       bs_addr_r <= 0;
       bs_shift_r <= 0;
     end else if (!SEL) begin
       bs_bit_count_r <= 0;
-      word_rdy_o <= 0;
+      jtag_word_rdy_r <= 0;
       bs_addr_r <= 0;
       bs_shift_r <= 0;
     end else if (SHIFT && !RESET) begin
       bs_shift_r     <= bs_tmp;  // shift data out
       bs_bit_count_r <= bs_bit_count_r + 1;  // wrapping data_word_width bit counter
-      if ((bs_bit_count_r == (BIT_WIDTH - 1)) && !ack_i) begin  // at last bit
-        word_rdy_o            <= 1;
-        data_o              <= bs_tmp;  // output the word
+      if ((bs_bit_count_r == (BIT_WIDTH - 1)) && !ack_r) begin  // at last bit
+        jtag_word_rdy_r     <= 1;
+        jtag_data_r         <= bs_tmp;  // output the word
         bs_mem_r[bs_addr_r] <= bs_tmp;  // update current address in memory
         bs_shift_r          <= bs_mem_r[bs_addr_next];  // load next address to shift register
         bs_addr_r           <= bs_addr_next;  // update address
-      end else if (ack_i) begin
-        word_rdy_o <= 0;  // word has been handled cross domain, move on to next
+      end else if (ack_r) begin
+        jtag_word_rdy_r <= 0;  // word has been handled cross domain, move on to next
       end
     end
   end
+
+  assign we_o = ack_r;
+  assign write_addr_o = write_addr_r;
+  assign data_o = data_r;
+
+  always_ff @(posedge clk_i) begin
+    if (rst_i) begin  // reset state
+      write_addr_r <= 0;
+      ack_r <= 0;
+      data_r <= 0;
+    end else if (SEL == 0) begin  // jtag inactive
+      write_addr_r <= 0;
+      data_r <= 0;
+    end else begin
+      if (jtag_word_rdy_r && !ack_r) begin  // jtag has received a word,
+        //we have not handled it yet
+        ack_r  <= 1;
+        data_r <= jtag_data_r;
+      end else if (ack_r && !jtag_word_rdy_r) begin
+        // we have handled the word, and jtag has acknowleged it
+        ack_r <= 0;
+        write_addr_r <= write_addr_r + 1;
+      end
+    end
+  end
+
+
 endmodule
