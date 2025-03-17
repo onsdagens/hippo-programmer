@@ -3,7 +3,7 @@ module fpga_top (
 
     output logic [3:0] led_r,
     output logic [3:0] led_b,
-
+    output logic [3:0] led,
     input logic [1:0] sw,
     input logic [1:0] btn
 );
@@ -66,6 +66,7 @@ module fpga_top (
   // interface with the memory via leds (just debugging)
   always_ff @(posedge clk) begin
     if (sw[1]) begin
+      led <= {'0, '0, '0, '0};
       read_addr <= 0;
       button_released <= 1;
     end else if (btn[0] && button_released) begin
@@ -76,6 +77,11 @@ module fpga_top (
       button_released <= 0;
     end else if (!btn[0] && !btn[1]) begin
       button_released <= 1;
+    end else begin
+        led[0] <= mem_addr[0];
+        led[1] <= mem_addr[1];
+        led[2] <= mem_addr[2];
+        led[3] <= jtag_we;
     end
   end
 

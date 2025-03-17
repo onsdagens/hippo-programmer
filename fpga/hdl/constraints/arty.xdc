@@ -59,5 +59,15 @@ set_property -dict {PACKAGE_PIN G4 IOSTANDARD LVCMOS33} [get_ports led_b[1] ]
 set_property -dict {PACKAGE_PIN H4 IOSTANDARD LVCMOS33} [get_ports led_b[2] ]
 set_property -dict {PACKAGE_PIN K2 IOSTANDARD LVCMOS33} [get_ports led_b[3] ]
 
+## Debug LEDs
+set_false_path -to [get_ports led[0] ]
+set_false_path -to [get_ports led[1] ]
+set_false_path -to [get_ports led[2] ]
+set_false_path -to [get_ports led[3] ]
+set_property -dict {PACKAGE_PIN H5 IOSTANDARD LVCMOS33}  [get_ports led[0] ]
+set_property -dict {PACKAGE_PIN J5 IOSTANDARD LVCMOS33}  [get_ports led[1] ]
+set_property -dict {PACKAGE_PIN T9 IOSTANDARD LVCMOS33}  [get_ports led[2] ]
+set_property -dict {PACKAGE_PIN T10 IOSTANDARD LVCMOS33} [get_ports led[3] ]
+
 
 set_property BITSTREAM.CONFIG.USERID 32'h00102030 [current_design]
