@@ -12,8 +12,10 @@ For instance bit 0 of current memory output corresponds to the red channel of LE
 
 The memory can be programmed (in tests we use [ftdaye](https://github.com/onsdagens/ftdaye), you can refer to example `ftdaye_mpsse`, for an idea on how to work with this.).
 
+By pressing button 2, the byte 'hA7 is written to the current memory location.
+
 Since programming is bytewise, to test the word-wide interface, the memory can also be "defaced" via the button interface.
-By pressing button 2, 'h0DEFACED is written to the current memory address.
+By pressing button 3, 'h0DEFACED is written to the current memory address.
 
 We intend to eventually extend upon `ftdaye` to make it more usable, for now this is future work.
 
