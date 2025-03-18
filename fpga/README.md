@@ -10,7 +10,7 @@ The current memory address can be reset back to 0 by pressing button 1.
 The value of the byte under the current memory address is displayed using the RGB LEDs as a bit display.
 For instance bit 0 of current memory output corresponds to the red channel of LED 0, and bit 4 corresponds to the blue channel of the same LED.
 
-The memory can be programmed (in tests we use (hippo-programmer)[https://github.com/onsdagens/hippo-host], refer to the README.md for instructions).
+The memory can be programmed (in tests we use [hippo-programmer](https://github.com/onsdagens/hippo-host), refer to the README.md for instructions).
 
 By pressing button 2, the byte 'hA7 is written to the current memory location.
 
