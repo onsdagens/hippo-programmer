@@ -7,7 +7,7 @@ It instantiates a memory, and a simple interface using buttons and LEDs.
 The current memory address starts at 0, and can be incremented by 1 by pressing button 0.
 The current memory address can be reset back to 0 by pressing button 1.
 
-The value under the current memory address is displayed using the RGB LEDs as a bit display.
+The value of the byte under the current memory address is displayed using the RGB LEDs as a bit display.
 For instance bit 0 of current memory output corresponds to the red channel of LED 0, and bit 4 corresponds to the blue channel of the same LED.
 
 The memory can be programmed (in tests we use [ftdaye](https://github.com/onsdagens/ftdaye), you can refer to example `ftdaye_mpsse`, for an idea on how to work with this.).
