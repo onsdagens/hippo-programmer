@@ -56,9 +56,7 @@ module fpga_top
   assign mem_we = jtag_we | we;
   assign mem_width = jtag_we ? BYTE : if_width;
 
-  interleaved_memory #(
-      .INIT_FILE("MEM_FILE.mem")
-  ) memory (
+  interleaved_memory #() memory (
       .clk_i(clk),
       .rst_i(sw[1]),
       .width_i(mem_width),
@@ -70,10 +68,10 @@ module fpga_top
   );
 
   logic button_released;
-  
+
   assign led_r = jtag_we ? '0 : mem_dout[3:0];
   assign led_b = jtag_we ? '0 : mem_dout[7:4];
-  assign led = jtag_we ? '0 : curr_addr[3:0];
+  assign led   = jtag_we ? '0 : curr_addr[3:0];
   // interface with the memory via leds (just debugging)
   always_ff @(posedge clk) begin
     if (sw[1]) begin

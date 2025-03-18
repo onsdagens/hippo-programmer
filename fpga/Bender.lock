@@ -1,6 +1,6 @@
 packages:
   hippo-memory:
-    revision: d020e7afe0c0c5d775faa55d8a2a6c921fbea417
+    revision: c1fafb2f46dc84840947a000860c985abfcba8bc
     version: null
     source:
       Git: https://github.com/onsdagens/hippo-memory
