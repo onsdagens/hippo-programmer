@@ -2,7 +2,8 @@
 `timescale 1ns / 1ps
 
 module jtag #(
-    parameter integer BIT_WIDTH = 8
+    parameter integer BIT_WIDTH  = 8,
+    parameter integer ADDR_WIDTH = 10
 ) (
     // system clock
     input clk_i,
@@ -13,7 +14,7 @@ module jtag #(
 
     output logic [BIT_WIDTH-1:0] data_o,
 
-    output logic [9:0] write_addr_o
+    output logic [ADDR_WIDTH-1:0] write_addr_o
 );
 
   // BSCANE2: Boundary-Scan User Instruction
@@ -56,7 +57,7 @@ module jtag #(
   logic jtag_word_rdy_r;
 
   // System Clock Side
-  logic [9:0] write_addr_r;
+  logic [ADDR_WIDTH-1:0] write_addr_r;
   logic ack_r;
 
 
@@ -74,9 +75,9 @@ module jtag #(
   logic ack_xing, ack_jtag_r;
   always_ff @(posedge TCK) begin
     if (rst_i) begin
-        {ack_jtag_r, ack_xing} <= {'0, '0};
+      {ack_jtag_r, ack_xing} <= {'0, '0};
     end else begin
-        {ack_jtag_r, ack_xing} <= {ack_xing, ack_r};
+      {ack_jtag_r, ack_xing} <= {ack_xing, ack_r};
     end
   end
 
@@ -135,7 +136,7 @@ module jtag #(
       old_ack_r <= ack_r;
       ack_r <= 0;
     end else begin
-        old_ack_r <= ack_r;
+      old_ack_r <= ack_r;
       if (word_rdy_r && !ack_r) begin  // jtag has received a word,
         //we have not handled it yet
         ack_r <= 1;
@@ -146,7 +147,7 @@ module jtag #(
       // we want to count edges of ack really
       if ((old_ack_r != ack_r) && old_ack_r) begin
         write_addr_r <= write_addr_r + 1;
-      end 
+      end
     end
   end
 
